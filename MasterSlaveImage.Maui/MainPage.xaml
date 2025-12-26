@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MasterSlaveImage.Maui.ViewModels"
+             xmlns:models="clr-namespace:MasterSlaveImage.Maui.Models"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="MasterSlaveImage.Maui.MainPage"
+             x:DataType="vm:MainViewModel"
+             Title="Image Processor Client"
+             BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="340, *" Padding="10" RowSpacing="10" ColumnSpacing="10">
+
+        <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ: СТАТУС ВОРКЕРОВ -->
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                Stroke="#333" StrokeThickness="1" BackgroundColor="#1E1E1E" 
+                Padding="10" StrokeShape="RoundRectangle 5">
+
+            <CollectionView ItemsSource="{Binding WorkerStats}" HeightRequest="80">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:WorkerStatDto">
+                        <Border Stroke="{Binding StatusColor}" StrokeThickness="2" BackgroundColor="#252525" 
+                                WidthRequest="120" HeightRequest="70" StrokeShape="RoundRectangle 8">
+                            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="White" 
+                                       HorizontalTextAlignment="Center" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding StatusText}" TextColor="{Binding StatusColor}" 
+                                       FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                                <Label Text="{Binding TotalProcessed, StringFormat='Всего: {0}'}" 
+                                       TextColor="Gray" FontSize="9" HorizontalTextAlignment="Center"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <Label Text="Подключение к серверу..." TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center"/>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Border>
+
+        <!-- 2. ЛЕВАЯ КОЛОНКА -->
+        <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*, 200" RowSpacing="10">
+
+            <!-- А) СКРОЛЛ НАСТРОЕК (ИСПРАВЛЕНО: Default вместо Auto) -->
+            <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Default">
+                <VerticalStackLayout Spacing="10" Padding="0,0,5,0">
+
+                    <!-- Настройки подключения -->
+                    <Border Stroke="#333" BackgroundColor="#1E1E1E" Padding="10" StrokeShape="RoundRectangle 5">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="FTP SERVER" TextColor="Gray" FontSize="10" FontAttributes="Bold"/>
+                            <Grid ColumnDefinitions="*, 70" RowDefinitions="Auto, Auto" ColumnSpacing="5" RowSpacing="5">
+                                <Entry Grid.Row="0" Grid.Column="0" Placeholder="Host" Text="{Binding FtpHost}" TextColor="White" PlaceholderColor="Gray" BackgroundColor="#2A2A2A"/>
+                                <Entry Grid.Row="0" Grid.Column="1" Placeholder="Port" Text="{Binding FtpPort}" Keyboard="Numeric" TextColor="White" PlaceholderColor="Gray" BackgroundColor="#2A2A2A"/>
+                                <Entry Grid.Row="1" Grid.Column="0" Placeholder="User" Text="{Binding FtpUser}" TextColor="White" PlaceholderColor="Gray" BackgroundColor="#2A2A2A"/>
+                                <Entry Grid.Row="1" Grid.Column="1" Placeholder="Pass" Text="{Binding FtpPassword}" IsPassword="True" TextColor="White" PlaceholderColor="Gray" BackgroundColor="#2A2A2A"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Настройки Обработки -->
+                    <Border Stroke="#333" BackgroundColor="#1E1E1E" Padding="10" StrokeShape="RoundRectangle 5">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="ПАРАМЕТРЫ ФОТО" TextColor="Gray" FontSize="10" FontAttributes="Bold"/>
+
+                            <Grid ColumnDefinitions="Auto, *, Auto, *" RowDefinitions="Auto, Auto" ColumnSpacing="5" RowSpacing="10">
+                                <Label Grid.Row="0" Grid.Column="0" Text="W:" TextColor="White" VerticalOptions="Center"/>
+                                <Entry Grid.Row="0" Grid.Column="1" Text="{Binding TargetWidth}" Keyboard="Numeric" 
+                                       TextColor="White" BackgroundColor="#2A2A2A" HorizontalTextAlignment="Center"/>
+
+                                <Label Grid.Row="0" Grid.Column="2" Text="H:" TextColor="White" VerticalOptions="Center"/>
+                                <Entry Grid.Row="0" Grid.Column="3" Text="{Binding TargetHeight}" Keyboard="Numeric" 
+                                       TextColor="White" BackgroundColor="#2A2A2A" HorizontalTextAlignment="Center"/>
+
+                                <Label Grid.Row="1" Grid.Column="0" Text="Fmt:" TextColor="White" VerticalOptions="Center"/>
+                                <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" StrokeThickness="0" BackgroundColor="#2A2A2A" Padding="0">
+                                    <Picker ItemsSource="{Binding Formats}" SelectedItem="{Binding SelectedFormat}" 
+                                            TextColor="White" Title="Формат" HorizontalTextAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Кнопки управления -->
+                    <VerticalStackLayout Spacing="8">
+                        <Button Text="1. ВЫБРАТЬ ФАЙЛЫ" Command="{Binding SelectFilesCommand}" 
+                                BackgroundColor="#333" TextColor="White" CornerRadius="5"/>
+
+                        <Button Text="2. ОТПРАВИТЬ В ОБРАБОТКУ" Command="{Binding StartProcessingCommand}" 
+                                BackgroundColor="#512BD4" TextColor="White" FontAttributes="Bold" CornerRadius="5"
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"/>
+
+                        <Button Text="3. СКАЧАТЬ РЕЗУЛЬТАТ" Command="{Binding DownloadResultsCommand}" 
+                                BackgroundColor="#008000" TextColor="White" CornerRadius="5"/>
+
+                        <Label Text="{Binding StatusMessage}" HorizontalOptions="Center" TextColor="#448AFF" FontSize="12"/>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="20" Color="Transparent"/>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Б) ЛОГИ -->
+            <Border Grid.Row="1" BackgroundColor="#000000" Stroke="#333" Padding="5" StrokeShape="RoundRectangle 5">
+                <ScrollView>
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding SystemLogs}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="sys:String">
+                                <Label Text="{Binding .}" TextColor="#00FF00" FontSize="10" FontFamily="Consolas" LineBreakMode="CharacterWrap"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+
+        <!-- 3. ПРАВАЯ КОЛОНКА: СЕТКА -->
+        <Border Grid.Row="1" Grid.Column="1" Stroke="#333" BackgroundColor="#1E1E1E" Padding="0" StrokeShape="RoundRectangle 5">
+            <CollectionView ItemsSource="{Binding Images}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" VerticalItemSpacing="5" HorizontalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ImageDisplayItem">
+                        <Frame Padding="0" HasShadow="False" BackgroundColor="#252525" BorderColor="#444" CornerRadius="5">
+                            <Grid RowDefinitions="*, 30">
+                                <Grid Grid.Row="0" ColumnDefinitions="*, *" HeightRequest="180">
+                                    <!-- Оригинал -->
+                                    <Image Grid.Column="0" Source="{Binding OriginalSource}" Aspect="AspectFit" BackgroundColor="Black" Margin="2"/>
+                                    <Label Grid.Column="0" Text="ORIG" TextColor="White" BackgroundColor="#80000000" 
+                                           FontSize="9" VerticalOptions="Start" HorizontalOptions="Start" Padding="3"/>
+
+                                    <!-- Результат -->
+                                    <Image Grid.Column="1" Source="{Binding ProcessedSource}" Aspect="AspectFit" BackgroundColor="#151515" Margin="2"/>
+                                    <Label Grid.Column="1" Text="{Binding FileTypeBadge}" TextColor="Black" BackgroundColor="#FFA500" 
+                                           FontSize="9" FontAttributes="Bold" VerticalOptions="Start" HorizontalOptions="End" Padding="3"/>
+                                </Grid>
+
+                                <Label Grid.Row="1" Text="{Binding FileName}" TextColor="Gray" FontSize="10" 
+                                       HorizontalOptions="Center" VerticalOptions="Center" LineBreakMode="MiddleTruncation"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                        <Label Text="Нет изображений" TextColor="Gray" FontSize="18"/>
+                        <Label Text="Нажмите 'Выбрать файлы' слева" TextColor="DimGray" FontSize="12"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Border>
+
+    </Grid>
+</ContentPage>
