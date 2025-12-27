@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MasterSlaveImage.SlaveNode.Application.Implementations.ClientHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIABAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Application\Implementations\ClientHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MasterSlaveImage.SlaveNode.Application.Implementations.ImageProcessor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Application\Implementations\ImageProcessor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MasterSlaveImage.SlaveNode.Application.Implementations.TcpListenerService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAgAAAAAAAIAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Application\Implementations\TcpListenerService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MasterSlaveImage.SlaveNode.Domain.Configuration.SlaveSettings" Collapsed="true">
+    <Position X="5.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Configuration\SlaveSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MasterSlaveImage.SlaveNode.SlaveWorker" Collapsed="true">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAEA=</HashCode>
+      <FileName>SlaveWorker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MasterSlaveImage.SlaveNode.Application.Interfaces.IClientHandler" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Application\Interfaces\IClientHandler.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MasterSlaveImage.SlaveNode.Application.Interfaces.IImageProcessor" Collapsed="true">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Application\Interfaces\IImageProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MasterSlaveImage.SlaveNode.Application.Interfaces.ITcpListenerService" Collapsed="true">
+    <Position X="4" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Application\Interfaces\ITcpListenerService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

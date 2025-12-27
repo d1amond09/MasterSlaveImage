@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MasterSlaveImage.Maui.Models.ImageDisplayItem" Collapsed="true">
+    <Position X="2.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAABgAAAAAAAAAAAAAEAAAAAAAgA=</HashCode>
+      <FileName>Models\ImageDisplayItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.Models.ServerStatusDto" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Models\ServerStatusDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.Models.WorkerStatDto" Collapsed="true">
+    <Position X="4.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAgAAAAAAAAAAAACAAAAAAQAAACAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Models\WorkerStatDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.Services.Implementations.AlertService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Implementations\AlertService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.Services.Implementations.FilePickerService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Implementations\FilePickerService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.Services.Implementations.FtpUploadService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAIAAAEAAAAAAAACAAAA=</HashCode>
+      <FileName>Services\Implementations\FtpUploadService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.Services.Implementations.ZipArchiverService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Implementations\ZipArchiverService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.ViewModels.MainViewModel" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CCAAAAIQYIAAAAAAAEIIAABAIABJIBMAgAgEAEIJAAI=</HashCode>
+      <FileName>ViewModels\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MasterSlaveImage.Maui.MainPage" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MainPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MasterSlaveImage.Maui.Services.Interfaces.IAlertService" Collapsed="true">
+    <Position X="4.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Interfaces\IAlertService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MasterSlaveImage.Maui.Services.Interfaces.IFilePickerService" Collapsed="true">
+    <Position X="6" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Interfaces\IFilePickerService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MasterSlaveImage.Maui.Services.Interfaces.IFtpUploadService" Collapsed="true">
+    <Position X="7.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAIAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Services\Interfaces\IFtpUploadService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MasterSlaveImage.Maui.Services.Interfaces.IZipArchiverService" Collapsed="true">
+    <Position X="2.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Interfaces\IZipArchiverService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -11,12 +11,25 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Console()
+	.WriteTo.File(
+		path: "logs/log-.txt",       
+		rollingInterval: RollingInterval.Day, 
+		retainedFileCountLimit: 7,
+		outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+	)
+	.CreateBootstrapLogger();
 
 try
 {
 	await Host.CreateDefaultBuilder(args)
-		.UseSerilog((c, s, conf) => conf.ReadFrom.Configuration(c.Configuration).WriteTo.Console())
+		.UseSerilog((context, services, configuration) => configuration
+			.ReadFrom.Configuration(context.Configuration)
+			.ReadFrom.Services(services)
+			.Enrich.FromLogContext()
+			.WriteTo.Console()
+			.WriteTo.File("logs/app-log-.txt", rollingInterval: RollingInterval.Day))
 		.ConfigureServices((c, services) =>
 		{
 			var config = c.Configuration.GetSection("MasterSettings");

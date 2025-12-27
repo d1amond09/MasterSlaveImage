@@ -17,6 +17,12 @@ var switchMappings = new Dictionary<string, string>()
 
 Log.Logger = new LoggerConfiguration()
 	.WriteTo.Console()
+	.WriteTo.File(
+			path: "logs/log-.txt",      
+			rollingInterval: RollingInterval.Day,
+			retainedFileCountLimit: 7, 
+			outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+		)
 	.CreateBootstrapLogger();
 
 try
@@ -42,7 +48,8 @@ static IHostBuilder CreateHostBuilder(string[] args, Dictionary<string, string> 
 			.ReadFrom.Configuration(context.Configuration)
 			.ReadFrom.Services(services)
 			.Enrich.FromLogContext()
-			.WriteTo.Console())
+			.WriteTo.Console()
+			.WriteTo.File("logs/app-log-.txt", rollingInterval: RollingInterval.Day))
 		.ConfigureServices((hostContext, services) =>
 		{
 			services.Configure<SlaveSettings>(hostContext.Configuration.GetSection("SlaveSettings"));
