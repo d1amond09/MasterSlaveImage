@@ -10,6 +10,7 @@ public class FtpUploadService : IFtpUploadService
 	{
 		var client = new AsyncFtpClient(s.Host, s.Username, s.Password, s.Port);
 		client.Config.ConnectTimeout = 5000;
+		client.Config.DataConnectionType = FtpDataConnectionType.AutoPassive;
 		return client;
 	}
 
@@ -43,12 +44,12 @@ public class FtpUploadService : IFtpUploadService
 		}
 	}
 
-	public async Task<List<byte[]>> DownloadResultsAsync(string resultFolderName, FtpSettings settings, Action<string>? onLog = null)
+	public async Task<List<DownloadedFile>> DownloadResultsAsync(string resultFolderName, int expectedCount, FtpSettings settings, Action<string>? onLog = null)
 	{
-		var list = new List<byte[]>();
+		var resultList = new List<DownloadedFile>();
 		string targetDir = $"/results/{resultFolderName}";
 
-		onLog?.Invoke($"Waiting for results...");
+		onLog?.Invoke($"Жду {expectedCount} файлов в: {targetDir}");
 
 		for (int i = 0; i < 30; i++)
 		{
@@ -56,22 +57,38 @@ public class FtpUploadService : IFtpUploadService
 			try
 			{
 				await client.Connect();
+
 				if (await client.DirectoryExists(targetDir))
 				{
-					var files = await client.GetListing(targetDir);
-					if (files.Any(f => f.Type == FtpObjectType.File))
+					var items = await client.GetListing(targetDir);
+
+					var filesOnly = items.Where(f => f.Type == FtpObjectType.File).ToList();
+
+					if (filesOnly.Count > 0)
 					{
-						onLog?.Invoke($"Downloading {files.Length} files...");
-						foreach (var f in files)
+						onLog?.Invoke($"Найдено файлов: {filesOnly.Count} из {expectedCount}");
+					}
+
+					if (filesOnly.Count >= expectedCount)
+					{
+						await Task.Delay(1000);
+
+						onLog?.Invoke("Скачивание...");
+						foreach (var f in filesOnly)
 						{
-							if (f.Type == FtpObjectType.File)
+							var bytes = await client.DownloadBytes(f.FullName, CancellationToken.None);
+							if (bytes != null)
 							{
-								var bytes = await client.DownloadBytes(f.FullName, CancellationToken.None);
-								if (bytes != null) list.Add(bytes);
+								resultList.Add(new DownloadedFile
+								{
+									FileName = f.Name,
+									Data = bytes
+								});
 							}
 						}
+
 						await client.Disconnect();
-						return list;
+						return resultList; 
 					}
 				}
 				await client.Disconnect();
@@ -87,11 +104,13 @@ public class FtpUploadService : IFtpUploadService
 	public async Task<byte[]?> DownloadFileBytesAsync(string remotePath, FtpSettings settings)
 	{
 		using var client = Create(settings);
-		try
-		{
+		try { 
 			await client.Connect();
 			return await client.DownloadBytes(remotePath, CancellationToken.None);
 		}
-		catch { return null; }
+		catch 
+		{ 
+			return null; 
+		}
 	}
 }

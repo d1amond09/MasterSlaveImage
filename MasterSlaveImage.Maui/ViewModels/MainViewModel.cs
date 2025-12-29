@@ -154,20 +154,19 @@ public partial class MainViewModel : ObservableObject
 			AddLog($"Сохранение в: {savePath}");
 
 			var settings = new FtpSettings(FtpHost, FtpPort, FtpUser, FtpPassword);
-			var results = await _ftp.DownloadResultsAsync(CurrentResultFolder, settings, AddLog);
+			var results = await _ftp.DownloadResultsAsync(
+				CurrentResultFolder,
+				Images.Count, 
+				settings,
+				AddLog
+			);
 
 			int savedCount = 0;
 			for (int i = 0; i < results.Count; i++)
 			{
-				byte[] data = results[i];
-				string fileName = $"processed_{DateTime.Now.Ticks}_{i}.{SelectedFormat}";
-				if (i < Images.Count)
-				{
-					string origName = Path.GetFileNameWithoutExtension(Images[i].FileName);
-					fileName = $"{origName}_processed.{SelectedFormat}";
-				}
-				string fullPath = Path.Combine(savePath, fileName);
-				await File.WriteAllBytesAsync(fullPath, data);
+				var fileResult = results.ElementAt(i);
+				string fullPath = Path.Combine(savePath, fileResult.FileName);
+				await File.WriteAllBytesAsync(fullPath, fileResult.Data);
 				savedCount++;
 			}
 
@@ -190,21 +189,39 @@ public partial class MainViewModel : ObservableObject
 	{
 		if (string.IsNullOrEmpty(CurrentResultFolder)) return;
 
-		var results = await _ftp.DownloadResultsAsync(CurrentResultFolder, settings, AddLog);
+		var downloadedFiles = await _ftp.DownloadResultsAsync(
+			CurrentResultFolder,
+			Images.Count,
+			settings,
+			AddLog
+		);
 
-		int i = 0;
-		foreach (var bytes in results)
+		if (downloadedFiles.Count == 0)
 		{
-			if (i < Images.Count)
+			AddLog("Результаты пусты.");
+			return;
+		}
+
+		foreach (var file in downloadedFiles)
+		{
+			string nameNoExt = Path.GetFileNameWithoutExtension(file.FileName);
+
+			var originalImage = Images.FirstOrDefault(img =>
+				Path.GetFileNameWithoutExtension(img.FileName) == nameNoExt);
+
+			if (originalImage != null)
 			{
-				var img = Images[i];
-				img.ProcessedBytes = bytes;
+				originalImage.ProcessedBytes = file.Data;
+
 				MainThread.BeginInvokeOnMainThread(() =>
 				{
-					img.ProcessedSource = ImageSource.FromStream(() => new MemoryStream(bytes));
-					img.FileTypeBadge = SelectedFormat.ToUpper();
+					originalImage.ProcessedSource = ImageSource.FromStream(() => new MemoryStream(file.Data));
+					originalImage.FileTypeBadge = Path.GetExtension(file.FileName).Trim('.').ToUpper();
 				});
-				i++;
+			}
+			else
+			{
+				AddLog($"Не нашел пару для: {file.FileName}");
 			}
 		}
 	}
